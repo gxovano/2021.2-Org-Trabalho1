@@ -1,13 +1,15 @@
 	.data
 ordem: .word 9
-vetor: .word 0, 3, 0, 4
-matriz: .word 2, 
+vetor_v: .word 0, 0, 0, 0
+vetor: .word 0, 3, 1, 1
+matriz: .word 1, 0, 4, 1, 4
 
 	.text
 main:
 	la a2, vetor
 	la a3, matriz
 	jal insere_embarcacao
+	
 	li a7, 93
 	ecall
 	
@@ -15,7 +17,9 @@ insere_embarcacao:
 	addi sp, sp, -4
 	sw ra, 0(sp)
 	jal testeAB_vetor
+	bnez a0, fim
 	jal teste_sobreposicao
+fim:
 	lw ra, 0(sp)
 	addi sp, sp, 4
 	ret
@@ -23,12 +27,16 @@ insere_embarcacao:
 .include "TestesEmbarcacao.asm"
 
 teste_sobreposicao:
-	addi sp, sp, -4
+	addi sp, sp, -8
 	sw ra, 0(sp)
 	jal gerar_vetor_logico
 	addi s0, a0, 0
+	sw s0, 4(sp)
+	
+	
+		
 	lw ra, 0(sp)
-	addi sp, sp, 4
+	addi sp, sp, 0
 	ret
 
 #####

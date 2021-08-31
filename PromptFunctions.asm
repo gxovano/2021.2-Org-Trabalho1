@@ -1,7 +1,7 @@
 ###
  # Inclusão dos prompts para o usuário
 prompt_usuario:
-	la t0, vetor1
+	la t0, vetor_v
 	la a0, digite_orientacao
 	li a7, 4
 	ecall
@@ -34,3 +34,7 @@ prompt_usuario:
 	sw a0, 0(t0)
 		
 	ret
+###
+ # mostra_erro(a2): exibe uma mensagem de erro para o usuário conforme o código
+#mostra_erro:
+	
