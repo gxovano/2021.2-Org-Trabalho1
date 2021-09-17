@@ -1,20 +1,30 @@
 	.data
 .include "PromptTexts.asm"
+
+preenchimento1: .word 0x2d
+preenchimento2: .word 0x2e
+inicio_maiusculas: .word 0x41
+matriz_posicoes: .space 100
+matriz_tiros: .space 100
+vetor_de_tiros: .space 100
 ordem: .word 10
-vetor_v: .word 0, 0, 0, 0
-matriz: .word 0
+#matriz_embarcacoes: .space 400
+matriz_embarcacoes: .word 3, 1, 5, 0, 0, 0, 3, 2, 2, 1, 1, 3, 4
+#vetor_tiros_acertados: .space 100
+#vetor_tiros_errados: .space 100
+vetor_tiros_acertados: .word 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4
+vetor_tiros_errados: .word 4, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4
 
 	.text
 main:
-	jal prompt_usuario
-	ebreak
+	jal menu_e_tiros
 	la a2, vetor_v	
-	
 	la a3, matriz 
 	jal insere_embarcacoes
 	
+		
 	addi a2, a0, 0
-	#jal mostra_erro
+	jal mostra_erro
 	# fim
 	li a7, 93
 	ecall
@@ -57,7 +67,7 @@ fim:
 	ret
 	
 
-.include "InsertionFunctions.asm"
+.include "MatrixFunctions.asm"
 .include "InsertionTests.asm"
 	
 	
