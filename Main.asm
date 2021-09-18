@@ -32,7 +32,7 @@ loop_jogo:					# loop de interação principal do jogo
 	la a3, menu				# carrega endereço do menu a ser exibido para o usuário
 	la a4, menu_footer			# carrega endereço do rodapé
 	jal menu_e_tiros			# exibe opções para o usuário
-	li t0, 5				# carrega número 5 para comparação
+	li t0, 6				# carrega número 5 para comparação
 	beq a0, t0, fim_jogo			# caso opção digitada for 5, encerra jogo
 	li t0, 1				# carrega número 1 para comparação
 	beq a0, t0, exibe_matriz_navios	# caso opção digitada for 1, exibe a matriz de navios
@@ -40,6 +40,8 @@ loop_jogo:					# loop de interação principal do jogo
 	beq a0, t0, input_tiro			# caso opção digitada for 2, solicita ao usuário coordenadas de tiro
 	li t0, 3				# carrega número 3 para comparação
 	li t0, 4				# carrega número 4 para comparação
+	li t0, 5				# carrega número 6 para comparação
+	beq a0, t0, reiniciar			# reinicializa as matrizes
 	j loop_jogo				# continua o loop do jogo
 fim_jogo:
 	li a7, 10
@@ -118,10 +120,9 @@ testa_e_marca_se_acertou:
 	ble a1, t1, acertou_o_tiro		# caso o caracter da matriz esteja no interfalo de letras maiusculas, acertou
 	j fim_teste_tiro
 acertou_o_tiro:
-	ebreak
 	#TODO colocar tiro no vetor de erros para as estatísticas
 	lw a4, 4(sp)				# carrega ponteiro da matriz de caracteres em A4  
-	addi a5, a5, 0x20			# adiciona valor 20 para tornar letra minúscula
+	addi a5, a5, 31				# adiciona valor 31 para tornar letra minúscula
 	jal insere_matriz_posicoes		# função do arquivo "MatrixFunctions.asm"	
 	lw a4, 8(sp)				# carrega valor de A4 (ponteiro matriz de tiro)
 	lw a5, char_tiro_certeiro		# carrega letra 'x'
@@ -152,8 +153,7 @@ insere_embarcacoes:
 	sw ra, 0(sp)
 	jal testeAB_vetor
 	bnez a0, fim
-	#jal teste_sobreposicao
-	ebreak
+	#jal teste_sobreposicao	
 	addi a4, a3, 0
 	addi a4, a4, 4
 	lw a6, 0(a3)				# números de linhas na matriz
