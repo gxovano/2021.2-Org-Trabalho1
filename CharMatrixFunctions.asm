@@ -3,7 +3,7 @@
  #      a3: ponteiro para matriz de caracteres
 gera_matriz_vazia:
 	addi sp, sp, -4			# adiciona espaço na pilha 
-	sw ra, 0(sp)			# armazena endereço de retorno
+	sw ra, 0(sp)			# armazena endereço de retorno na pilha
 	addi a4, a3, 0			# copia o endereço da matriz para A4
 	lw a5, preenchimento1		# caracter vazio
 	lw s1, ordem			# ordem da matriz
@@ -16,8 +16,8 @@ loop_vazio:
 	srli a7, a7, 15			# zera o índice de coluna
 	addi a6, a6, 1			# incrementa índice de linha
 	bne a6, s1, loop_vazio		# caso não tenha chegado até a última linha, repetir
-	lw ra, 0(sp)
-	addi sp, sp, 4
+	lw ra, 0(sp)			# retorna o valor de RA salvo na pilha de execução
+	addi sp, sp, 4			# retorna para a posição anterior da pilha
 	ret
 	
 #####
@@ -26,7 +26,7 @@ loop_vazio:
  # 	a4: cabeçalho da matriz
 imprime_matriz_posicoes:
 	addi sp, sp, -8			# adiciona espaço na pilha 
-	sw ra, 0(sp)			# armazena endereço de retorno
+	sw ra, 0(sp)			# armazena endereço de retorno na pilha
 	addi a0, a4, 0 			# carrega cabecalho da matriz de navios
 	li a7, 4			# carrega ecall PrintString
 	ecall				# 
@@ -73,7 +73,7 @@ loop_vazia_linha:
  #      a3: ponteiro para matriz de caracteres
 gera_matriz_posicoes:
 	addi sp, sp, -4			# adiciona espaço na pilha 
-	sw ra, 0(sp)			# armazena endereço de retorno
+	sw ra, 0(sp)			# armazena endereço de retorno na pilha
 	lw s0, 0(a2)			# número de embarcações
 	lw a4, inicio_maiusculas	# número ASCII inicial das maiúsculas  
 	li s2, 0			# contador de embarcações
@@ -103,7 +103,7 @@ loop_embarcacoes:
  #      a4: caracter representando o navio	
 insere_embarcacao_posicao:
 	addi sp, sp, -4			# adiciona espaço na pilha 
-	sw ra, 0(sp)			# armazena endereço de retorno
+	sw ra, 0(sp)			# armazena endereço de retorno na pilha
 	lw s3, 0(a2)			# carrega orientação da embarcação
 	lw s4, 4(a2)			# carrega comprimento da embarcação
 	lw a6, 8(a2)			# carrega número da linha
@@ -111,19 +111,19 @@ insere_embarcacao_posicao:
 	li s5, 1 			# contador de itens
 	addi a5, a4, 0			# copia registrador para chamada da função
 	addi a4, a3, 0			# copia registrador para chamada da função
-	bnez s3, insere_embarcacao_posicao_vertical	# 
-	beqz s3, insere_embarcacao_posicao_horizontal	# 
+	bnez s3, insere_embarcacao_posicao_vertical	# se orientação não for 0 (vertical), pula
+	beqz s3, insere_embarcacao_posicao_horizontal	# se orientação for 0 (horizontal), pula
 insere_embarcacao_posicao_vertical:
 	jal insere_matriz_posicoes	# chama função para inserir na matriz de posições
 	addi s5, s5, 1			# incrementa contador de comprimento
-	addi a6, a6, 1			# incrementa posição da 
-	ble s5, s4, insere_embarcacao_posicao_vertical #
-	j fim_insere_posicao		# 
+	addi a6, a6, 1			# incrementa posição da linha
+	ble s5, s4, insere_embarcacao_posicao_vertical # enquanto não tiver o comprimento, continua colocando chars
+	j fim_insere_posicao		# pula para o final da função
 insere_embarcacao_posicao_horizontal:
-	jal insere_matriz_posicoes	# 
-	addi s5, s5, 1			#
-	addi a7, a7, 1			#
-	ble s5, s4, insere_embarcacao_posicao_horizontal #
+	jal insere_matriz_posicoes	# função no arquivo "MatrixFunctions.asm", insere caracter representando o navio
+	addi s5, s5, 1			# incrementa contador de comprimento
+	addi a7, a7, 1			# incrementa posição da coluna
+	ble s5, s4, insere_embarcacao_posicao_horizontal # enquanto não tiver o comprimento, continua colocando chars
 fim_insere_posicao:
 	lw ra, 0(sp)			# retorna o valor de RA salvo na pilha de execução
 	addi sp, sp, 4			# retorna para a posição anterior da pilha

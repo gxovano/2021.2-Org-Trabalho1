@@ -44,3 +44,18 @@ busca_matriz_posicoes:
 	add t1, a4, t3			# P + deslocamento
 	lb a1, 0(t1)			# carrega E na posição (P + deslocamento) no registrador de retorno
 	ret
+	
+#####
+ # busca_matriz_posicoes_endereco(a4,a6,a7): retorna um caracter da matriz de posições
+ #      a4: ponteiro do inicio da matriz (P)
+ # 	a6: linha da matriz (L)
+ #	a7: coluna da matriz (C)
+ #	-> a1: caracter da posição (L,C)
+busca_matriz_posicoes_endereco:
+	lw t1, 0(a4)			# ponteiro para a posição inicial da matriz de caracteres
+	lw t2, ordem			# número de colunas na matriz (Q)
+	mul t3, a6, t2			# L * Q
+	add t3, t3, a7			# L * Q + C
+	add t1, a4, t3			# P + deslocamento
+	lb a1, 0(t1)			# carrega E na posição (P + deslocamento) no registrador de retorno
+	ret

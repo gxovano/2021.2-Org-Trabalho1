@@ -29,19 +29,20 @@ menu_e_tiros:
  # solicita_input_tiro(a2): solicita ao usuário o input de coordenadas do tiro
  	# a2: ponteiro para vetor de coordenadas (x,y)
 solicita_input_tiro:
-	la a0, digite_linha_tiro
-	li a7, 4
-	ecall
-	li a7, 5
-	ecall
-	sw a7, 0(a2)
-	la a0, digite_coluna_tiro
-	li a7, 4
-	ecall
-	li a7, 5
-	ecall
-	sw a7, 4(a2)
-	ret
+	la a0, digite_linha_tiro	# 
+	li a7, 4			# 
+	ecall				# 
+	li a7, 5			# 
+	ecall				# 
+	sw a0, 0(a2)			# 
+	la a0, digite_coluna_tiro	# 
+	li a7, 4			# 
+	ecall				# 
+	li a7, 5			# 
+	ecall				# 
+	sw a0, 4(a2)			# 
+	addi a0, a2, 0			# 
+	ret				
 
 #####
  # input_navio(a2): prompt de input exibe menu
@@ -80,7 +81,6 @@ input_navio:
 		
 	ret
 
-	
 ###
  # mostra_erro(a2): exibe uma mensagem de erro para o usuário conforme o código
 #mostra_erro:
