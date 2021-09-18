@@ -77,4 +77,5 @@ alinha_vetor:				# alinha os bits adicionados no loop com a posição inicial
 	sub t5, t5, t4 			# (ordem) - (comprimento) - MSB
 	sll a0, t1, t5			# rola todos os bits do vetor até a posição inicial, à esquerda
 	ret
-	
+
+

@@ -4,6 +4,7 @@ preenchimento1: .word 0x2d
 preenchimento2: .word 0x2e
 inicio_maiusculas: .word 0x41
 ordem: .word 10
+vetor_xy: .word 0,0
 matriz_posicoes: .space 100 
 matriz_tiros: .space 100 
 vetor_de_tiros: .space 100 
@@ -23,6 +24,9 @@ main:
 	la a5, matriz_tiros			# carrega endereço da matriz de caracteres de tiros
 	jal inicio_do_jogo			# inicializa o conteúdo das matrizes
 loop_jogo:					# loop de interação principal do jogo
+	la a0, separador_prompt
+	li a7, 4
+	ecall
 	la a2, matriz_tiros			# carrega endereço da matriz de caracteres de tiros
 	la a3, menu				# carrega endereço do menu a ser exibido para o usuário
 	la a4, menu_footer			# carrega endereço do rodapé
@@ -30,9 +34,12 @@ loop_jogo:					# loop de interação principal do jogo
 	li t0, 5				# carrega número 5 para comparação
 	beq a0, t0, fim_jogo			# caso opção digitada for 5, encerra jogo
 	li t0, 1				# carrega número 1 para comparação
+	beq a0, t0, exibe_matriz_navios	# caso opção digitada for 1, exibe a matriz de navios
 	li t0, 2				# carrega número 2 para comparação
+	beq a0, t0, input_tiro			# caso opção digitada for 2, solicita ao usuário coordenadas de tiro
 	li t0, 3				# carrega número 3 para comparação
 	li t0, 4				# carrega número 4 para comparação
+	j loop_jogo
 fim_jogo:
 	li a7, 10
 	ecall
@@ -66,6 +73,42 @@ inicio_do_jogo:
 	addi sp, sp, 20				# 
 	ret
 
+#####
+ # exibe_matriz_navios(): exibe a matriz de navios
+exibe_matriz_navios:	
+	la a3, matriz_posicoes 		# 
+	la a4, cabecalho_matriz_navios		# carrega label do arquivo "PromptTexts.asm" no reg. A4
+	jal imprime_matriz_posicoes		# função do arquivo "CharMatrixFunctions"
+	la a0, prompt_continuar
+	li a7, 4
+	ecall
+	li a7, 8
+	ecall	
+	j loop_jogo
+	
+#####
+ # input_tiro(): realiza tiro na matriz
+input_tiro:
+	la a2, vetor_xy
+	jal solicita_input_tiro
+	la a3, matriz_posicoes
+	jal testa_se_acertou
+	
+	j loop_jogo
+
+#####
+ # testa_se_acertou(a2,a3): realiza tiro na matriz
+ #      a2: ponteiro do vetor de coordenadas
+ #	a3: ponteiro da matriz de caracteres de navios	
+testa_se_acertou:
+	addi sp, sp, -4
+	sw ra, 0(sp)
+	
+	
+	lw ra, 0(sp)
+	addi sp, sp, 4
+	ret
+	
 #####
  # insere_embarcacoes(a2,a3): insere a embarcação na matriz
  #      a2: ponteiro do vetor representando o navio
