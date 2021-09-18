@@ -1,11 +1,34 @@
 #####
- # menu_e_tiros(): exibe menu
-menu_e_tiros:
+ # menu_e_tiros(a2,a3,a4): exibe menu
+ 	# a2: ponteiro para matriz de caracteres 
+ 	# a3: ponteiro para cabeçalho do menu
+ 	# a4: ponteiro para rodapé do menu
+ 	# -> a0: opção escolhida
+menu_e_tiros: 
+	addi sp, sp, -12		# 
+	sw ra, 0(sp)			# 
+	sw a3, 4(sp)			# 
+	sw a4, 8(sp)			# 
+	la a4, cabecalho_matriz_tiro	# 
+	addi a3, a2, 0			# 
+	jal imprime_matriz_posicoes 	#
+	lw a3, 4(sp) 			#
+	addi a0, a3, 0 			#
+	li a7, 4			#
+	ecall				#
+	lw a4, 8(sp)			#
+	addi a0, a4, 0			# 
+	ecall				#
+	li a7, 5			#
+	ecall				# 
+	lw ra, 0(sp)			# 
+	addi sp, sp, 12			# 
+	ret
 	
 #####
  # input_navio(a2): prompt de input exibe menu
-prompt_usuario:
-	la t0, vetor_v
+input_navio:
+#	la t0, vetor_v
 	la a0, digite_orientacao
 	li a7, 4
 	ecall
@@ -39,11 +62,6 @@ prompt_usuario:
 		
 	ret
 
-#####
- # imprime_matriz(a3): imprime matriz de navios
- #      a3: ponteiro do vetor representando a embarcação
-#imprime_matriz:
-	
 	
 ###
  # mostra_erro(a2): exibe uma mensagem de erro para o usuário conforme o código

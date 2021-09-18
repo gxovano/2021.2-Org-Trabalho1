@@ -35,6 +35,7 @@ insere_matriz_posicoes:
  #      a4: ponteiro do inicio da matriz (P)
  # 	a6: linha da matriz (L)
  #	a7: coluna da matriz (C)
+ #	-> a1: caracter da posição (L,C)
 busca_matriz_posicoes:
 	lw t1, 0(a4)			# ponteiro para a posição inicial da matriz de caracteres
 	lw t2, ordem			# número de colunas na matriz (Q)
