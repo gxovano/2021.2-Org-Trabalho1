@@ -28,7 +28,7 @@ inicio_do_jogo:
 exibe_matriz_navios:	
 	la a3, matriz_posicoes 		# 
 	la a4, cabecalho_matriz_navios		# carrega label do arquivo "PromptTexts.asm" no reg. A4
-	jal imprime_matriz_posicoes		# função do arquivo "CharMatrixFunctions"
+	jal imprime_matriz_posicoes		# função do arquivo "CharMatrixFunctions.asm"
 	la a0, prompt_continuar		# carrega prompt de pausa
 	li a7, 4				# carrega código ecall PrintString
 	ecall					# 
@@ -44,6 +44,11 @@ input_tiro:
 	addi a2, a0, 0 				# carrega ponteiro do vetor de coordenadas de input
 	la a3, matriz_posicoes			# carrega ponteiro da matriz de caracteres de navios 
 	la a4, matriz_tiros			# carrega ponteiro da matriz de caracteres de tiros
+	la t0, vetor_ultimo_tiro		# carrega ponteiro do vetor de último tiro
+	lw t1, 0(a2)				# 
+	sw t1, 0(t0)				# 
+	lw t1, 4(a2)				# 
+	sw t1, 4(t0)				# 
 	jal testa_e_marca_se_acertou		# testa se o tiro acertou algum navio
 	j loop_jogo				# retorna ao loop de jogo
 
@@ -90,6 +95,59 @@ fim_teste_tiro:
 	lw ra, 0(sp)				# retorna o valor de RA salvo na pilha de execução
 	addi sp, sp, 4				# retorna para a posição anterior da pilha
 	ret
+	
+#####
+ # estatisticas_jogo(): mostra as estatisticas para o usuário
+estatisticas_jogo:
+	addi sp, sp, -4				# reserva espaço na pilha de execução
+	sw ra, 0(sp)				# salva RA na pilha de execução
+	lw s0, vetor_tiros_acertados		# recupera total de tiros acertados
+	lw s1, vetor_tiros_errados		# recupera total de tiros errados
+	add s2, s0, s1				# total = acertados + errados
+	#
+	la a2, separador_prompt		# 
+	jal adiciona_ao_buffer_pointers	# 
+	# msg total
+	la a2, divisor				# carrega endereço do divisor
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	la a2, msg_qtd_total_tiros		# carrega ponteiro da mensagem
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# nro total
+	addi a2, s2, 0				# carrega nro tiros acertados
+	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
+	addi a2, a0, 0				#
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# msg acertados
+	la a2, divisor				# carrega endereço do divisor
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	la a2, msg_qtd_tiros_certeiros		# carrega ponteiro da mensagem
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# nro acertados
+	addi a2, s0, 0				# carrega nro tiros acertados
+	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
+	addi a2, a0, 0				#
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# msg errados
+	la a2, divisor				# carrega endereço do divisor
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	la a2, msg_qtd_tiros_nagua		# carrega ponteiro da mensagem
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# nro errados
+	addi a2, s1, 0				# carrega nro tiros acertados
+	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
+	addi a2, a0, 0				# carrega para a variável de entrada
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# print buffer
+	jal print_buffer_pointers		# função do arquivo "MatrixFunctions.asm"
+	# limpa bufferes
+	jal limpa_buffer_pointers 		# limpa o buffer_pointers
+	jal limpa_buffer_words			# limpa o buffer_words
+	# fim
+	lw ra, 0(sp)				# recupera o RA da pilha
+	addi sp, sp, 4				# reseta a pilha
+	ret
+	
+	
 
 #####
  # reiniciar_jogo(a2,a3): reinicializa as matrizes do jogo
