@@ -9,7 +9,7 @@ msg_erro_saliente: .asciz "A embarcação está saliente à dimensão da matriz.\n"
 digite_linha_tiro: .asciz "\nDigite a linha onde será o disparo: "
 digite_coluna_tiro: .asciz "\nDigite a coluna onde será o disparo: "
  # Prompts do menu
-menu: .asciz "-----------\nEscolha a proxima ação:\n1 - Exibir matriz de navios\n2 - Efetuar tiro\n3 - Exibir estatisticas\n4 - Inserir navio\n5 - Reiniciar jogo\n6 - Sair"
+menu: .asciz "-----------\nEscolha a próxima ação:\n1 - Exibir matriz de navios\n2 - Efetuar tiro\n3 - Exibir estatisticas\n4 - Inserir navio\n5 - Reiniciar jogo\n6 - Sair"
 menu_footer: .asciz "\n-----------\n"
  # Montagem da matriz
 cabecalho_matriz_navios: .asciz " _____________________ \n|   MATRIZ DE NAVIOS  |\n|_____________________|\n  0 1 2 3 4 5 6 7 8 9\n"
