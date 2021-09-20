@@ -1,4 +1,42 @@
 #####
+ # reiniciar_jogo(a2,a3): reinicializa as matrizes do jogo
+reiniciar_jogo:
+	la a3, matriz_embarcacoes		# carrega endereço da matriz de embarcações
+	la a4, matriz_posicoes			# carrega endereço da matriz de caracteres de posições
+	la a5, matriz_tiros			# carrega endereço da matriz de caracteres de tiros
+	jal inicio_do_jogo			# inicializa o conteúdo das matrizes
+	j fim_loop_jogo
+
+#####
+ # input_tiro(): realiza tiro na matriz
+input_tiro:
+	la a2, vetor_xy				# carrega ponteiro do vetor de coordenadas de input
+	jal solicita_input_tiro		# função do arquivo "PromptFunctions.asm", retorna em a0
+	addi a2, a0, 0 				# carrega ponteiro do vetor de coordenadas de input
+	la a3, matriz_posicoes			# carrega ponteiro da matriz de caracteres de navios 
+	la a4, matriz_tiros			# carrega ponteiro da matriz de caracteres de tiros
+	la t0, vetor_ultimo_tiro		# carrega ponteiro do vetor de último tiro
+	lw t1, 0(a2)				# 
+	sw t1, 0(t0)				# 
+	lw t1, 4(a2)				# 
+	sw t1, 4(t0)				# 
+	jal testa_e_marca_se_acertou		# testa se o tiro acertou algum navio
+	j fim_loop_jogo
+
+#####
+ # exibe_matriz_navios(): exibe a matriz de navios
+exibe_matriz_navios:	
+	la a3, matriz_posicoes 		# 
+	la a4, cabecalho_matriz_navios		# carrega label do arquivo "PromptTexts.asm" no reg. A4
+	jal imprime_matriz_posicoes		# função do arquivo "CharMatrixFunctions.asm"
+	la a0, prompt_continuar		# carrega prompt de pausa
+	li a7, 4				# carrega código ecall PrintString
+	ecall					# 
+	li a7, 8				# carrega código ecall 
+	ecall					# 
+	j fim_loop_jogo
+	
+#####
  # inicio_do_jogo(a2,a3,a4,a5): inicialização do jogo
  #      a2: ponteiro para string representando a matriz de embarcações
  #      a3: ponteiro para matriz de embarcações
@@ -22,35 +60,6 @@ inicio_do_jogo:
 	lw ra, 0(sp)				# retorna o valor de RA salvo na pilha de execução
 	addi sp, sp, 20				# retorna para a posição anterior da pilha
 	ret
-	
-#####
- # exibe_matriz_navios(): exibe a matriz de navios
-exibe_matriz_navios:	
-	la a3, matriz_posicoes 		# 
-	la a4, cabecalho_matriz_navios		# carrega label do arquivo "PromptTexts.asm" no reg. A4
-	jal imprime_matriz_posicoes		# função do arquivo "CharMatrixFunctions.asm"
-	la a0, prompt_continuar		# carrega prompt de pausa
-	li a7, 4				# carrega código ecall PrintString
-	ecall					# 
-	li a7, 8				# carrega código ecall 
-	ecall					# 
-	j loop_jogo				# retorna ao loop principal do jogo
-
-#####
- # input_tiro(): realiza tiro na matriz
-input_tiro:
-	la a2, vetor_xy				# carrega ponteiro do vetor de coordenadas de input
-	jal solicita_input_tiro		# função do arquivo "PromptFunctions.asm", retorna em a0
-	addi a2, a0, 0 				# carrega ponteiro do vetor de coordenadas de input
-	la a3, matriz_posicoes			# carrega ponteiro da matriz de caracteres de navios 
-	la a4, matriz_tiros			# carrega ponteiro da matriz de caracteres de tiros
-	la t0, vetor_ultimo_tiro		# carrega ponteiro do vetor de último tiro
-	lw t1, 0(a2)				# 
-	sw t1, 0(t0)				# 
-	lw t1, 4(a2)				# 
-	sw t1, 4(t0)				# 
-	jal testa_e_marca_se_acertou		# testa se o tiro acertou algum navio
-	j loop_jogo				# retorna ao loop de jogo
 
 #####
  # testa_e_marca_se_acertou(a2,a3,a4): realiza tiro na matriz
@@ -113,7 +122,7 @@ estatisticas_jogo:
 	la a2, msg_qtd_total_tiros		# carrega ponteiro da mensagem
 	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
 	# nro total
-	addi a2, s2, 0				# carrega nro tiros acertados
+	addi a2, s2, 0				# carrega nro total tiros
 	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
 	addi a2, a0, 0				#
 	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
@@ -133,7 +142,7 @@ estatisticas_jogo:
 	la a2, msg_qtd_tiros_nagua		# carrega ponteiro da mensagem
 	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
 	# nro errados
-	addi a2, s1, 0				# carrega nro tiros acertados
+	addi a2, s1, 0				# carrega nro tiros n'água
 	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
 	addi a2, a0, 0				# carrega para a variável de entrada
 	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
@@ -146,49 +155,31 @@ estatisticas_jogo:
 	lw ra, 0(sp)				# recupera o RA da pilha
 	addi sp, sp, 4				# reseta a pilha
 	ret
-	
-	
 
 #####
- # reiniciar_jogo(a2,a3): reinicializa as matrizes do jogo
-reiniciar_jogo:
-	la a2, string_embarcacoes		# carrega endereço do string de embarcações
-	la a3, matriz_embarcacoes		# carrega endereço da matriz de embarcações
-	la a4, matriz_posicoes			# carrega endereço da matriz de caracteres de posições
-	la a5, matriz_tiros			# carrega endereço da matriz de caracteres de tiros
-	jal inicio_do_jogo			# inicializa o conteúdo das matrizes
-	j loop_jogo
-
-#####
- # insere_embarcacoes(a2,a3): insere a embarcação na matriz
- #      a2: ponteiro do vetor representando o navio
- #	a3: ponteiro do início da matriz
- #       0(a2): disposicao do navio (0 horizontal) (1 vertical)
- #       4(a2): comprimento do navio 
- #       8(a2): linha inicial do navio
- #      12(a2): coluna inicial do navio 
+ # insere_embarcacoes(a2): insere a embarcação na matriz
+ #      a2: ponteiro da string representando as embarcações
 insere_embarcacoes:
-	addi sp, sp, -4
-	sw ra, 0(sp)
-	jal testeAB_vetor
-	bnez a0, fim
-	#jal teste_sobreposicao	
-	addi a4, a3, 0
-	addi a4, a4, 4
-	lw a6, 0(a3)				# números de linhas na matriz
-	addi s0, a2, 0				# contador de elementos do vetor
-	li t2, 0				# contador de colunas
-	addi a7, t2, 0
-	li t4, 4				# número de colunas da matriz de navios
-loop_insere:
-	lw a5, 0(s0)
-	jal insere_matriz_embarcacoes
-	addi s0, s0, 4
-	addi a7, a7, 1
-	bne a7, t4, loop_insere
-	addi a6, a6, 1
-	sw a6, 0(a3)
-fim:
-	lw ra, 0(sp)
-	addi sp, sp, 4
-	ret
+	#addi sp, sp, -4				# reserva espaço na pilha de execução
+	#sw ra, 0(sp)				# salva RA na pilha de execução
+	la t1, matriz_embarcacoes		# carrega endereço da matriz temporária
+	lw t0, 0(a2)				# carrega primeiro valor da string (nro embarcações)
+	addi t0, t0, -48			# subtrai 48 para obter o número em lugar do código ASCII
+	sw t0, 0(t1)				# armazena na matriz de embarcações 
+	addi t2, a2, 0				# copia valor do endereço da matriz
+	li t3, ' '				# carrega valor espaço
+	li t4, '\n'				# carrega valor nova linha
+	li t6, '\0'				# carrega valor de fechamento de string
+loop_string:
+	addi t2, t2, 4				# avança caracter na string
+	addi t1, t1, 4				# avança posição na matriz
+	lw t5, 0(t2)				# carrega valor
+	beq t5, t3, loop_string		# se for espaço, continua
+	beq t5, t4, loop_string		# se for nova linha, continua
+	beq t5, t5, fim_loop_conversao		# se for fim da string, fim
+	sw t5, 0(t1)				# armazena o valor na matriz de embarcações
+	j loop_string
+fim_loop_conversao:
+	#lw ra, 0(sp)
+	#addi sp, sp, 4
+	ret	

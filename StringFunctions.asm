@@ -42,6 +42,9 @@ loop_limpa_buffer_ponteiros:
 	addi t2, t2, 1			# incrementa contador de ponteiros
 	sw t3, 0(t0)			# armazena string vazia no buffer
 	ble t2, t1, loop_limpa_buffer_ponteiros	# se contador menor que nro de ponteiros, continua
+	la t0, buffer_pointer
+	li t1, 0
+	sw t1, 0(t0)
 	ret
 
 #####
@@ -95,6 +98,9 @@ loop_limpa_buffer_conteudo:
 	addi t2, t2, 1			# incrementa contador de ponteiros
 	sw t3, 0(t0)			# armazena string vazia no buffer
 	ble t2, t1, loop_limpa_buffer_conteudo	# se contador menor que nro de ponteiros, continua
+	la t0, buffer_words
+	li t1, 0
+	sw t1, 0(t0)
 	ret
 
 	

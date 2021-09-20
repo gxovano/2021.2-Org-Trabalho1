@@ -34,6 +34,17 @@ menu_e_tiros:
 	lw ra, 0(sp)			# 
 	addi sp, sp, 12			# 
 	ret
+	
+#####
+ # printa_erro(a2): printa mensagem para usuário conforme código de erro
+ #      a2: ponteiro da string representando as embarcações	
+printa_erro:
+	addi sp, sp, -4			# reserva espaço na pilha para 3 words (3 * 4)
+	sw ra, 0(sp)			# salva RA na pilha
+	jal divisor			# 
+	addi sp, sp, -4			# reserva espaço na pilha para 3 words (3 * 4)
+	sw ra, 0(sp)			# salva RA na pilha
+	ret
 
 #####
  # divisor_curto(): printa divisor curto de output
@@ -67,47 +78,38 @@ solicita_input_tiro:
 	ecall				# 
 	sw a0, 4(a2)			# 
 	addi a0, a2, 0			# 
-	ret				
-
-
+	ret		
+			
 #####
- # input_navio(a2): prompt de input exibe menu
-input_navio:
-#	la t0, vetor_v
-	la a0, digite_orientacao
-	li a7, 4
-	ecall
-	li a7, 5
-	ecall
-	sw a0, 0(t0)
-	addi t0, t0, 4
-	
-	la a0, digite_comprimento
-	li a7, 4
-	ecall
-	li a7, 5
-	ecall
-	sw a0, 0(t0)
-	addi t0, t0, 4	
-	
-	la a0, digite_linha
-	li a7, 4
-	ecall
-	li a7, 5
-	ecall
-	sw a0, 0(t0)
-	addi t0, t0, 4
-	
-	la a0, digite_coluna
-	li a7, 4
-	ecall
-	li a7, 5
-	ecall
-	sw a0, 0(t0)
-		
+ # define_string_embarcacoes(): solicita ao usuário escolher uma das 3 strings de embarcações
+ 	# -> a0: ponteiro para string
+define_string_embarcacoes:
+	la a0, msg_escolhe_string	# 
+	li a7, 4			# 
+	ecall				# 
+	li a7, 5			# 
+	ecall				# 
+	li t0, 1			# 
+	beq t0, a0, string1		# 
+	li t0, 2			# 
+	beq t0, a0, string2		# 
+	li t0, 3			# 
+	beq t0, a0, string3		# 
+	li t0, 4			# 
+	beq t0, a0, string4		# 
+	li t0, 5			# 
+	beq t0, a0, string5		# 
+string1:
+	la a0, string_embarcacoes1	# 
+string2:
+	la a0, string_embarcacoes2	# 
+string3:
+	la a0, string_embarcacoes3	# 
+string4:
+	la a0, string_embarcacoes4	# 
+string5:
+	la a0, string_embarcacoes5	# 
 	ret
-
-###
- # mostra_erro(a2): exibe uma mensagem de erro para o usuário conforme o código
-#mostra_erro:
+	
+	
 	

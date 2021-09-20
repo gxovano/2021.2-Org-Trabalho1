@@ -26,7 +26,7 @@ ultimo_elemento_vetor:
 	lw t0, 0(a4)			# carrega F
 	slli t0, t0, 3			# F * 2^3
 	add t1, a4, t0			# P + (F * 2^3)
-	addi t1, t1, -4			# P + (F * 2^3) - 8 (para apontar para a última tupla armazenada)
+	addi t1, t1, -4			# P + (F * 2^3) - 4 (para apontar para a última tupla armazenada)
 	addi a0, t1, 0			# salva t1 no registrador de retorno a0
 	ret
 

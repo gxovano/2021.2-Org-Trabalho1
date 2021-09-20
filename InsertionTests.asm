@@ -18,19 +18,19 @@ testeAB_vetor:
 	beqz t1, testa_horizontal	# 
 testa_vertical:
 	lw t4, 8(a2)			# 
-	j testa_estouro
+	j testa_estouro			# 
 testa_horizontal:
-	lw t4, 12(a2)
+	lw t4, 12(a2)			# 
 testa_estouro:
-	add t5, t4, t2
-	addi t6, t6, 2
-	bge t5, a0, fim_erro
+	add t5, t4, t2			# 
+	addi t6, t6, 2			# 
+	bge t5, a0, fim_erro		# 
 fim_normal:	
-	srli a0, a0, 31
-	addi a0, a0, 0
+	srli a0, a0, 31			# 
+	addi a0, a0, 0			# 
 	ret
 fim_erro:
-	addi a0, t6, 0
+	addi a0, t6, 0			# 
 	ret
 
 #####
