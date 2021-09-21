@@ -23,7 +23,7 @@ char_tiro_nagua: .word 0x6f			# C: código ASCII 'o'
 inicio_maiusculas: .word 0x41			# C: caracter inicial da representação dos navios 'A'
 ordem: .word 10					# C: ordem da matriz para uso nas funções de 'MatrixFunctions.asm'
 vetor_xy: .word 0, 0				# Et: vetor de coordenadas para input do usuário
-vetor_ultimo_tiro: .word 0,0 			# Et: vetor de coordenadas do último tiro disparado 
+vetor_ultimo_tiro: .word 72,72			# Et: vetor de coordenadas do último tiro disparado 
 matriz_posicoes: .space 100 			# Em: matriz de caracteres de navios
 matriz_tiros: .space 100 			# Em: matriz de caracteres de tiros
 #matriz_embarcacoes: .space 400 
