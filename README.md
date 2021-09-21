@@ -10,15 +10,12 @@ a elaboração do programa final, com isso teve uma programação de auto nível
 <p>Como sabemos, a linguagem assembly é de baixo nível e segue uma sequência de instruções e métodos para elaboração de um simples programa, houve uma demanda grande em pesquisa de como usar cada instrução e ter uma boa noção sobre registradores e lógica de programação.</p>
 
 <br>
-<br>
 
 [1. Problema Apresentado](Docs/problema.md)<br>
 [2. Solução do desenvolvimento](Docs/solucao.md)<br>
 [3. Conclusão](Docs/conclusao.md)<br>
 [4. Referência](Docs/references.md)<br>
 	
-
-<br>
 <br>
 
 
