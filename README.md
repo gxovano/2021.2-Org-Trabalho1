@@ -3,11 +3,15 @@
 
 <p>É de todo conhecimento geral que, batalha naval é composta por um jogo de tabuleiro contendo dois jogadores, no qual ambos têm que adivinhar em que 
 quadrados estão os navios das oponentes. Mas de acordo com este trabalho foi realizado da seguinte forma, criar o tabuleiro e contendo uma string com 
-a seguintes informações como direcionamento dos navios (vertical ou horizonta), quantidade e o eixo x e y para alocar os navios, tendo pequenas 
+a seguintes informações como direcionamento dos navios (vertical ou horizontal), quantidade e o eixo x e y para alocar os navios, tendo pequenas 
 validações e com isso inicia uma bela partida de game. Antes de tudo, para compreender este trabalho teve uma implementação de testes para compreender 
 a elaboração do programa final, com isso teve uma programação de auto nível em c para compreender os passos para realização da implementação em assembly. <p>
 
 <p>Como sabemos, a linguagem assembly é de baixo nível e segue uma sequência de instruções e métodos para elaboração de um simples programa, houve uma demanda grande em pesquisa de como usar cada instrução e ter uma boa noção sobre registradores e lógica de programação.</p>
+
+<br>
+
+### SUMÁRIO
 
 <br>
 
