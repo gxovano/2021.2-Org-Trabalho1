@@ -1,3 +1,11 @@
+#####
+	# 2021.2 - Organização de Computadores
+	# Trabalho 1 - Batalha Naval
+	# Professor Luciano L. Caimi
+	# Estudantes:
+	# Nome: Geovano Lago Quatrin 	Matrícula: 1721101007	
+	# Nome: Rafaelle Arruda	Matrícula: 1721101029
+#####
 	.data
 #####
  # Definição das constantes e das variáveis de memória.
