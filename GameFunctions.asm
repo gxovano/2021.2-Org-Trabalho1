@@ -58,12 +58,13 @@ input_tiro:
  #	a3: ponteiro da matriz de caracteres de navios	
  # 	a4: ponteiro da matriz de caracteres de tiros
 testa_e_marca_se_acertou:
-	addi sp, sp, -12			# adiciona espaço na pilha 
+	addi sp, sp, -16			# adiciona espaço na pilha 
 	sw ra, 0(sp)				# armazena endereço de retorno na pilha
-	sw a3, 4(sp)				# 
+	sw a3, 4(sp)				# armazena A3 na pilha (ponteiro matriz de navios)
 	sw a4, 8(sp) 				# armazena A4 na pilha (ponteiro matriz de tiro)
+	sw a2, 12(sp)				# armazena A2 na pilha (ponteiro vetor de input)
 	addi a4, a3, 0				# carrega A4 com ponteiro de matriz de caracteres de navios 
-	lw a6, 0(a2)				# carrega A6 com coordenada de coluna para chamada de função
+	lw a6, 0(a2)				# carrega A6 com coordenada de linha para chamada de função
 	lw a7, 4(a2)				# carrega A7 com coordenada de coluna para chamada de função
 	jal busca_matriz_posicoes		# função do arquivo "MatrixFunctions.asm", retorna valor em A1
 	lw t0, preenchimento1			# carrega o caracter '-' de preenchimento
@@ -72,10 +73,16 @@ testa_e_marca_se_acertou:
 	ble a1, t1, acertou_o_tiro		# caso o caracter da matriz esteja no interfalo de letras maiusculas, acertou
 	j fim_teste_tiro
 acertou_o_tiro:
-	addi a5, a2, 0				# carrega ponteiro do vetor de coordenadas
-	la a4, vetor_tiros_acertados 		# carrega vetor de tiros acertados para chamada da função
-	jal insere_tupla2_vetor 		# função do arquivo "VectorFunctions.asm"
+	la t2, contabiliza_tiro		# carrega endereço 
+	jalr t2					# chama a função contabiliza tiro 
+	lw a2, 12(sp)				# carrega ponteiro da pilha
+	addi a5, a2, 0				# carrega ponteiro do vetor de coordenadas 
+	la a4, vetor_tiros_acertados 		# carrega vetor de tiros acertados para chamada da função 
+	jal insere_tupla2_vetor 		# função do arquivo "VectorFunctions.asm" 
+	lw a2, 12(sp)				# carrega ponteiro do vetor de coordenadas
 	lw a4, 4(sp)				# carrega ponteiro da matriz de caracteres em A4  
+	lw a6, 0(a2)				# carrega indice da linha
+	lw a7, 4(a2)				# carrega indice da coluna 
 	addi a5, a1, 32				# adiciona valor 31 para tornar letra minúscula
 	jal insere_matriz_posicoes		# função do arquivo "MatrixFunctions.asm"	
 	lw a4, 8(sp)				# carrega valor de A4 (ponteiro matriz de tiro)
@@ -96,6 +103,54 @@ fim_teste_tiro:
 	addi sp, sp, 4				# retorna para a posição anterior da pilha
 	ret
 	
+#####
+ # contabiliza_tiro(a1): mostra as estatisticas para o usuário
+ 	# a1: caracter simbolizando a embarcação
+contabiliza_tiro:
+	addi sp, sp, -4				# adiciona espaço na pilha 
+	sw ra, 0(sp)				# armazena endereço de retorno na pilha
+	addi t2, a1, -65			# subtrai o código ASCII para obter o índice da embarcação
+	la a4, matriz_embarcacoes		# carrega endereço da matriz de embarcações
+	addi a6, t2, 0				# carrega indice de linha para chamada 
+	li a7, 2				# carrega indice de coluna para chamada
+	jal busca_matriz_embarcacoes 		# função no arquivo "MatrixFunctions.asm", retorna ponteiro em A0
+	lw t3, 0(a0)				# carrega "comprimento" da embarcação
+	addi t3, t3, -1				# subtrai 1 do comprimento da embarcação
+	sw t3, 0(a0)				# salva novo "comprimento"
+	lw ra, 0(sp)				# recupera RA da pilha
+	addi sp, sp, 4				# restaura ponteiro da pilha 
+	ret		
+	
+#####
+ # conta_afundados(): conta o número de navios afundados
+ 	# -> a0: número de navios afundados
+conta_afundados:
+	ebreak
+	addi sp, sp, -4				# adiciona espaço na pilha 
+	sw ra, 0(sp)				# armazena endereço de retorno na pilha
+ 	la t0, matriz_embarcacoes 		# carrega endereço da matriz de embarcacoes 
+ 	lw s2, 0(t0) 				# carrega contador de elementos da matriz de embarcações
+ 	li s0, 0 				# contador local 
+ 	li s1, 0 				# contador embarcações
+ 	# addi t0, t0, 4 			# avança para início da matriz de embarcações
+ 	addi a4, t0, 0 				# carrega endereço da matriz de embarcações
+ 	li a7, 2 				# coluna correspondente ao comprimento da embarcação 
+loop_afundados:
+	bge s0, s2, fim_loop_afundados		# se ainda não percorreu todas as linhas, repetir
+	addi a6, s0, 0				# carrega número da linha
+	addi s0, s0, 1				# incrementa número da linha
+	jal busca_matriz_embarcacoes		# 
+	lw t6, 0(a0)				# 
+	bnez t6, loop_afundados		# se comprimento não for zero, a embarcação não está afundada
+	addi s1, s1, 1				# incrementa contador de embarcações afundadas
+	j loop_afundados
+fim_loop_afundados:
+	#addi s1, s1, 48				# adiciona 48 para completar o código ASCII
+	addi a0, s1, 0				# carrega valor no registrador de retorno
+	lw ra, 0(sp)				# retorna o valor de RA salvo na pilha de execução
+	addi sp, sp, 4				# retorna para a posição anterior da pilha
+	ret
+
 #####
  # estatisticas_jogo(): mostra as estatisticas para o usuário
 estatisticas_jogo:
@@ -137,6 +192,17 @@ estatisticas_jogo:
 	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
 	addi a2, a0, 0				# carrega para a variável de entrada
 	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# msg afundados
+	la a2, divisor				# carrega endereço do divisor
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	la a2, msg_qtd_afundados		# carrega endereço mensagem navios afundados
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
+	# nro afundados
+	jal conta_afundados			# conta nro de afundados
+	addi a2, a0, 0				# carrega para a variável de entrada
+	jal adiciona_int_ao_buffer_words 	# adiciona ao buffer de conteudos
+	addi a2, a0, 0				# carrega para a variável de entrada
+	jal adiciona_ao_buffer_pointers	# adiciona ao buffer de ponteiros
 	# print buffer
 	jal print_buffer_pointers		# função do arquivo "MatrixFunctions.asm"
 	# limpa bufferes
@@ -147,8 +213,6 @@ estatisticas_jogo:
 	addi sp, sp, 4				# reseta a pilha
 	ret
 	
-	
-
 #####
  # reiniciar_jogo(a2,a3): reinicializa as matrizes do jogo
 reiniciar_jogo:
@@ -168,17 +232,17 @@ reiniciar_jogo:
  #       8(a2): linha inicial do navio
  #      12(a2): coluna inicial do navio 
 insere_embarcacoes:
-	addi sp, sp, -4
-	sw ra, 0(sp)
-	jal testeAB_vetor
-	bnez a0, fim
-	#jal teste_sobreposicao	
-	addi a4, a3, 0
-	addi a4, a4, 4
+	addi sp, sp, -4 			# 
+	sw ra, 0(sp) 				# 
+	jal testeAB_vetor 			# 
+	bnez a0, fim 				# 
+	#jal teste_sobreposicao		# 
+	addi a4, a3, 0				# 
+	addi a4, a4, 4				# 
 	lw a6, 0(a3)				# números de linhas na matriz
 	addi s0, a2, 0				# contador de elementos do vetor
 	li t2, 0				# contador de colunas
-	addi a7, t2, 0
+	addi a7, t2, 0				#
 	li t4, 4				# número de colunas da matriz de navios
 loop_insere:
 	lw a5, 0(s0)

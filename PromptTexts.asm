@@ -11,7 +11,7 @@ digite_linha_tiro: .asciz "\nDigite a linha onde será o disparo: "
 digite_coluna_tiro: .asciz "\nDigite a coluna onde será o disparo: "
 msg_ultimo_tiro: .asciz "\n Último tiro: "
  # Prompts do menu
-menu: .asciz "Escolha a próxima ação:\n1 - Exibir matriz de navios\n2 - Efetuar tiro\n3 - Exibir estatisticas\n4 - Inserir navio\n5 - Reiniciar jogo\n6 - Sair"
+menu: .asciz "Escolha a próxima ação:\n1 - Exibir matriz de navios\n2 - Efetuar tiro\n3 - Exibir estatisticas\n4 - Reiniciar jogo\n5 - Sair"
 menu_footer: .asciz "\n---------------------------------\n"
 divisor: .asciz "\n---------------------------------"
  # Montagem da matriz
@@ -24,4 +24,5 @@ prompt_continuar: .asciz "\nSenta o dedo no Enter pra continuar..."
 msg_qtd_total_tiros: .asciz "\nTotal de tiros: "
 msg_qtd_tiros_certeiros: .asciz "\nTiros certeiros ao alvo: "
 msg_qtd_tiros_nagua: .asciz "\nTiros n'água: "
+msg_qtd_afundados: .asciz "\nNavios afundados: "
 

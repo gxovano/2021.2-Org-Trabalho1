@@ -28,6 +28,7 @@ matriz_posicoes: .space 100 			# Em: matriz de caracteres de navios
 matriz_tiros: .space 100 			# Em: matriz de caracteres de tiros
 #matriz_embarcacoes: .space 400 
 string_embarcacoes: .asciz "3\n1 5 0 0\n0 3 2 2\n1 1 3 4" 		# C: string representando as embarcações
+string_embarcacoes2: .asciz "3\n1 5 0 0\n0 3 2 2\n1 1 3 4" 		# C: string representando as embarcações
 matriz_embarcacoes: .word 3, 1, 5, 0, 0, 0, 3, 2, 2, 1, 1, 3, 4	# C: matriz com as embarcações
 vetor_tiros_acertados: .space 100 		# Ev: vetor com os tiros acertados pelo usuário
 vetor_tiros_errados: .space 100 		# Ev: vetor com os tiros errados pelo usuário
@@ -51,7 +52,7 @@ loop_jogo:					# loop de interação principal do jogo
 	la a4, menu_footer			# carrega endereço do rodapé
 	la a5, vetor_ultimo_tiro		# carrega vetor do último tiro
 	jal menu_e_tiros			# exibe opções para o usuário
-	li t0, 6				# carrega número 5 para comparação
+	li t0, 5				# carrega número 5 para comparação
 	beq a0, t0, fim_jogo			# caso opção digitada for 5, encerra jogo
 	li t0, 1				# carrega número 1 para comparação
 	beq a0, t0, exibe_matriz_navios	# caso opção digitada for 1, exibe a matriz de navios
@@ -59,8 +60,7 @@ loop_jogo:					# loop de interação principal do jogo
 	beq a0, t0, input_tiro			# caso opção digitada for 2, solicita ao usuário coordenadas de tiro
 	li t0, 3				# carrega número 3 para comparação
 	beq a0, t0, estatisticas_jogo		# caso opção digitada for 1, exibe a matriz de navios
-	li t0, 4				# carrega número 4 para comparação
-	li t0, 5				# carrega número 6 para comparação
+	li t0, 4				# carrega número 6 para comparação
 	beq a0, t0, reiniciar_jogo		# reinicializa as matrizes
 	j loop_jogo				# continua o loop do jogo
 fim_jogo:
