@@ -26,10 +26,10 @@ vetor_xy: .word 0, 0				# Et: vetor de coordenadas para input do usuário
 vetor_ultimo_tiro: .word 72,72			# Et: vetor de coordenadas do último tiro disparado 
 matriz_posicoes: .space 100 			# Em: matriz de caracteres de navios
 matriz_tiros: .space 100 			# Em: matriz de caracteres de tiros
-#matriz_embarcacoes: .space 400 
+matriz_embarcacoes: .space 400 
 string_embarcacoes: .asciz "3\n1 5 0 0\n0 3 2 2\n1 1 3 4" 		# C: string representando as embarcações
-string_embarcacoes2: .asciz "3\n1 5 0 0\n0 3 2 2\n1 1 3 4" 		# C: string representando as embarcações
-matriz_embarcacoes: .word 3, 1, 5, 0, 0, 0, 3, 2, 2, 1, 1, 3, 4	# C: matriz com as embarcações
+string_embarcacoes2: .asciz "3\n0 5 0 0\n1 3 2 2\n1 1 3 4" 		# C: string representando as embarcações
+string_embarcacoes3: .asciz "3\n0 5 0 0\n1 3 2 2\n1 1 3 4" 		# C: string representando as embarcações
 vetor_tiros_acertados: .space 100 		# Ev: vetor com os tiros acertados pelo usuário
 vetor_tiros_errados: .space 100 		# Ev: vetor com os tiros errados pelo usuário
 buffer: .word '\0'				# V: espaço temporário para saída de processamento (buffer de output)
@@ -38,7 +38,7 @@ buffer_words: .space 100			# V: buffer de words
 
 	.text
 main:	
-	la a2, string_embarcacoes		# carrega endereço do string de embarcações
+	la a2, string_embarcacoes2		# carrega endereço do string de embarcações
 	la a3, matriz_embarcacoes		# carrega endereço da matriz de embarcações
 	la a4, matriz_posicoes			# carrega endereço da matriz de caracteres de posições
 	la a5, matriz_tiros			# carrega endereço da matriz de caracteres de tiros

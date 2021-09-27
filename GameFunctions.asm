@@ -11,7 +11,7 @@ inicio_do_jogo:
 	sw a3, 8(sp)				# salva valor de A3 na pilha para chamada de função
 	sw a4, 12(sp)				# salva valor de A4 na pilha para chamada de função
 	sw a5, 16(sp)				# salva valor de A5 na pilha para chamada de função
-	#TODO conversão da string de navios para a matriz de embarcações
+	jal insere_string_embarcacoes		# insere a string de embarcações na memória
 	lw a3, 12(sp)				# carrega ponteiro da matriz de caracteres de posições
 	jal gera_matriz_vazia			# insere caracteres de preenchimento na matriz
 	lw a3, 16(sp)				# carrega ponteiro da matriz de caracteres de tiros
@@ -145,7 +145,7 @@ loop_afundados:
 	addi s1, s1, 1				# incrementa contador de embarcações afundadas
 	j loop_afundados
 fim_loop_afundados:
-	#addi s1, s1, 48				# adiciona 48 para completar o código ASCII
+	#addi s1, s1, 48			# adiciona 48 para completar o código ASCII
 	addi a0, s1, 0				# carrega valor no registrador de retorno
 	lw ra, 0(sp)				# retorna o valor de RA salvo na pilha de execução
 	addi sp, sp, 4				# retorna para a posição anterior da pilha
